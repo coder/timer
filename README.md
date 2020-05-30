@@ -2,7 +2,7 @@
 
 `cmdperf` measures the performance of a command by running it many times and producing runtime statistics.
 
-It is inspired by `perf stat`, but works on MacOS.
+It's inspired by `perf stat`, but works on MacOS.
 
 ## Install
 
