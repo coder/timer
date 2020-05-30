@@ -97,7 +97,7 @@ func (r *rootCmd) Run(fl *pflag.FlagSet) {
 	if !r.quiet {
 		fmt.Fprintf(wr, "\n")
 	}
-	fmt.Fprintf(wr, "--- config\n")
+	fmt.Fprintf(wr, "--- cmdperf config\n")
 	fmt.Fprintf(wr, "command\t%s\n", strings.Join(command, " "))
 	fmt.Fprintf(wr, "iterations\t%v\n", r.iterations)
 	fmt.Fprintf(wr, "parallelism\t%v\n", r.parallelism)
