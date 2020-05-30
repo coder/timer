@@ -1,19 +1,19 @@
-# cmdperf
+# timer
 
-`cmdperf` measures the performance of a command by running it many times and producing runtime statistics.
+`timer` is like `time` but repeats your command and provides basic statistics on execution time.
 
 It's inspired by `perf stat`, but works on MacOS.
 
 ## Install
 
 ```go
-go get cdr.dev/cmdperf
+go get cdr.dev/timer
 ```
 
 ## Basic Usage
 
 ```shell script
-$ cmdperf -n 4 -q sleep 1s
+$ timer -n 4 sleep 1s
 --- config
 command        sleep 1s
 iterations     4

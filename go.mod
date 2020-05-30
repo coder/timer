@@ -1,4 +1,4 @@
-module cdr.dev/cmdperf
+module cdr.dev/timer
 
 go 1.14
 
