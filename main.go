@@ -47,9 +47,10 @@ func (r *rootCmd) Run(fl *pflag.FlagSet) {
 	}
 
 	var (
-		commands = make(chan *exec.Cmd)
-		tooksMu  sync.Mutex
-		tooks    = make([]float64, 0, r.iterations)
+		commands   = make(chan *exec.Cmd)
+		tooksMu    sync.Mutex
+		tooks      = make([]float64, 0, r.iterations)
+		totalStart = time.Now()
 	)
 	var commandWaitGroup sync.WaitGroup
 	for i := 0; i < r.parallelism; i++ {
@@ -85,6 +86,8 @@ func (r *rootCmd) Run(fl *pflag.FlagSet) {
 	}()
 
 	commandWaitGroup.Wait()
+	totalTook := time.Since(totalStart)
+
 	sample := &stats.Sample{Xs: tooks}
 	sample = sample.Sort()
 
@@ -105,6 +108,7 @@ func (r *rootCmd) Run(fl *pflag.FlagSet) {
 	fmt.Fprintf(wr, "75\t(3rd quantile)\t%.3f\n", sample.Quantile(0.75))
 	fmt.Fprintf(wr, "100th\t(slowest)\t%.3f\n", sample.Quantile(1))
 	fmt.Fprintf(wr, "--- summary\n")
+	fmt.Fprintf(wr, "total\t%.3f\n", totalTook.Seconds())
 	fmt.Fprintf(wr, "mean\t%.3f\n", sample.Mean())
 	fmt.Fprintf(wr, "stddev\t%.3f\n", sample.StdDev())
 
