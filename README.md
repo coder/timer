@@ -52,5 +52,3 @@ total     2.013s
 mean      1.006s
 stddev    0.001s
 ```
-
-## Example: Benchmark google.com
