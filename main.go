@@ -102,15 +102,15 @@ func (r *rootCmd) Run(fl *pflag.FlagSet) {
 	fmt.Fprintf(wr, "iterations\t%v\n", r.iterations)
 	fmt.Fprintf(wr, "parallelism\t%v\n", r.parallelism)
 	fmt.Fprintf(wr, "--- percentiles\n")
-	fmt.Fprintf(wr, "0\t(fastest)\t%.3f\n", sample.Quantile(0))
-	fmt.Fprintf(wr, "25\t(1st quantile)\t%.3f\n", sample.Quantile(0.25))
-	fmt.Fprintf(wr, "50\t(median)\t%.3f\n", sample.Quantile(0.5))
-	fmt.Fprintf(wr, "75\t(3rd quantile)\t%.3f\n", sample.Quantile(0.75))
-	fmt.Fprintf(wr, "100th\t(slowest)\t%.3f\n", sample.Quantile(1))
+	fmt.Fprintf(wr, "0\t(fastest)\t%.3fs\n", sample.Quantile(0))
+	fmt.Fprintf(wr, "25\t(1st quantile)\t%.3fs\n", sample.Quantile(0.25))
+	fmt.Fprintf(wr, "50\t(median)\t%.3fs\n", sample.Quantile(0.5))
+	fmt.Fprintf(wr, "75\t(3rd quantile)\t%.3fs\n", sample.Quantile(0.75))
+	fmt.Fprintf(wr, "100th\t(slowest)\t%.3fs\n", sample.Quantile(1))
 	fmt.Fprintf(wr, "--- summary\n")
-	fmt.Fprintf(wr, "total\t%.3f\n", totalTook.Seconds())
-	fmt.Fprintf(wr, "mean\t%.3f\n", sample.Mean())
-	fmt.Fprintf(wr, "stddev\t%.3f\n", sample.StdDev())
+	fmt.Fprintf(wr, "total\t%.3fs\n", totalTook.Seconds())
+	fmt.Fprintf(wr, "mean\t%.3fs\n", sample.Mean())
+	fmt.Fprintf(wr, "stddev\t%.3fs\n", sample.StdDev())
 
 }
 
