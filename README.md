@@ -15,7 +15,7 @@ go get cdr.dev/timer
 ```shell script
 $ timer -n curl google.com
 --- timer config
-command        curl -s google.com
+command        curla"e" google.com
 iterations     10
 parallelism    1
 --- percentiles
