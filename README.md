@@ -52,3 +52,7 @@ total     2.013s
 mean      1.006s
 stddev    0.001s
 ```
+
+## Similar Projects
+
+- [bench](https://hackage.haskell.org/package/bench) provides more thorough analysis and is easily installed on MacOS
