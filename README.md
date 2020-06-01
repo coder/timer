@@ -29,7 +29,7 @@ total     0.455s
 mean      0.046s
 stddev    0.006s
 ```
-_[Apache Bench](https://httpd.apache.org/docs/2.4/programs/ab.html) is typically better for website ;)_
+_[Apache Bench](https://httpd.apache.org/docs/2.4/programs/ab.html) is typically better for websites_
 
 ## Parallelism
 
