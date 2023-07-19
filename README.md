@@ -2,12 +2,12 @@
 
 `timer` is like `time` but repeats your command and provides basic statistics on execution time.
 
-It's inspired by `perf stat`, but works on MacOS.
+It's inspired by `perf stat`, but works on macOS.
 
 ## Install
 
 ```go
-go get cdr.dev/timer
+go get github.com/coder/timer@master
 ```
 
 ## Basic Usage
@@ -29,7 +29,6 @@ total     0.455s
 mean      0.046s
 stddev    0.006s
 ```
-_[Apache Bench](https://httpd.apache.org/docs/2.4/programs/ab.html) is typically better for websites_
 
 ## Parallelism
 
@@ -55,4 +54,5 @@ stddev    0.001s
 
 ## Similar Projects
 
-- [bench](https://hackage.haskell.org/package/bench) provides more thorough analysis and is easily installed on MacOS
+- [bench (Haskell)](https://hackage.haskell.org/package/bench)
+- [Apache Bench](https://httpd.apache.org/docs/2.4/programs/ab.html)

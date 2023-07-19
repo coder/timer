@@ -1,4 +1,4 @@
-module cdr.dev/timer
+module github.com/coder/timer
 
 go 1.14
 
