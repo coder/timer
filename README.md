@@ -13,7 +13,7 @@ go get github.com/coder/timer@master
 ## Basic Usage
 
 ```shell script
-$ timer -n curl google.com
+$ timer -n 10 curl google.com
 --- timer config
 command        curl google.com
 iterations     10

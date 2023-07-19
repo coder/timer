@@ -145,7 +145,7 @@ func executeCommand(cmd *cobra.Command, args []string) {
 	})
 	fmt.Fprintf(wr, "--- summary\n")
 	fmt.Fprintf(wr, "total\t%v\n", totalTook.Truncate(scale))
-	fmt.Fprintf(wr, "mean\t%.3f\n", mean)
+	fmt.Fprintf(wr, "mean\t%.3f\n", mean/scale.Seconds())
 	fmt.Fprintf(wr, "median\t%.3f\n", sample.Quantile(0.5))
 	fmt.Fprintf(wr, "stddev\t%.3f\n", sample.StdDev())
 }
