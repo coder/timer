@@ -7,7 +7,7 @@ It's inspired by `perf stat`, but works on macOS.
 ## Install
 
 ```go
-go get github.com/coder/timer@master
+go install github.com/coder/timer@master
 ```
 
 ## Basic Usage
