@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/aclements/go-moremath/stats"
+	"github.com/aybabtme/uniplot/histogram"
 	"github.com/coder/flog"
 	"github.com/spf13/cobra"
 )
@@ -27,9 +28,35 @@ var (
 )
 
 func init() {
-	rootCmd.PersistentFlags().IntVarP(&iterations, "iterations", "n", 0, "number of iterations")
-	rootCmd.PersistentFlags().IntVarP(&parallelism, "parallelism", "p", 1, "number of concurrent workers")
-	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "don't show command output")
+	rootCmd.Flags().IntVarP(&iterations, "iterations", "n", 0, "number of iterations")
+	rootCmd.Flags().IntVarP(&parallelism, "parallelism", "p", 1, "number of concurrent workers")
+	rootCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "don't show command output")
+}
+
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func scaleOf(x float64) time.Duration {
+	switch {
+	case x < 1e-6:
+		return time.Nanosecond
+	case x < 1e-3:
+		return time.Microsecond
+	case x < 1:
+		return time.Millisecond
+	case x < 60:
+		return time.Second
+	case x < 60*60:
+		return time.Minute
+	case x < 24*60*60:
+		return time.Hour
+	default:
+		return time.Millisecond
+	}
 }
 
 func executeCommand(cmd *cobra.Command, args []string) {
@@ -89,24 +116,38 @@ func executeCommand(cmd *cobra.Command, args []string) {
 
 	wr := tabwriter.NewWriter(os.Stdout, 6, 4, 4, ' ', 0)
 	defer wr.Flush()
-	// This newline prefix helps when the output is mangled.
+	// This newline prefix helps separate timer output from command output.
 	if !quiet {
 		fmt.Fprintf(wr, "\n")
 	}
-	fmt.Fprintf(wr, "--- timer config\n")
+
+	mean := sample.Mean()
+	// Find the order of magnitude difference between the mean and a second.
+	scale := scaleOf(mean)
+
+	// Then, scale the mean and the sample to that order of magnitude, truncating
+	// noise.
+
+	fmt.Fprintf(wr, "--- config\n")
 	fmt.Fprintf(wr, "command\t%s\n", strings.Join(command, " "))
 	fmt.Fprintf(wr, "iterations\t%v\n", iterations)
 	fmt.Fprintf(wr, "parallelism\t%v\n", parallelism)
-	fmt.Fprintf(wr, "--- percentiles\n")
-	fmt.Fprintf(wr, "0\t(fastest)\t%.3fs\n", sample.Quantile(0))
-	fmt.Fprintf(wr, "25\t(1st quantile)\t%.3fs\n", sample.Quantile(0.25))
-	fmt.Fprintf(wr, "50\t(median)\t%.3fs\n", sample.Quantile(0.5))
-	fmt.Fprintf(wr, "75\t(3rd quantile)\t%.3fs\n", sample.Quantile(0.75))
-	fmt.Fprintf(wr, "100th\t(slowest)\t%.3fs\n", sample.Quantile(1))
+	fmt.Fprintf(wr, "unit\t%v\n", scale)
+
+	for i := range tooks {
+		tooks[i] = tooks[i] / scale.Seconds()
+	}
+
+	fmt.Fprintf(wr, "--- histogram\n")
+	hist := histogram.Hist(minInt(iterations, 8), tooks)
+	histogram.Fprintf(wr, hist, histogram.Linear(16), func(v float64) string {
+		return fmt.Sprintf("%.3f", v)
+	})
 	fmt.Fprintf(wr, "--- summary\n")
-	fmt.Fprintf(wr, "total\t%.3fs\n", totalTook.Seconds())
-	fmt.Fprintf(wr, "mean\t%.3fs\n", sample.Mean())
-	fmt.Fprintf(wr, "stddev\t%.3fs\n", sample.StdDev())
+	fmt.Fprintf(wr, "total\t%v\n", totalTook.Truncate(scale))
+	fmt.Fprintf(wr, "mean\t%.3f\n", mean)
+	fmt.Fprintf(wr, "median\t%.3f\n", sample.Quantile(0.5))
+	fmt.Fprintf(wr, "stddev\t%.3f\n", sample.StdDev())
 }
 
 func main() {
