@@ -1,5 +1,10 @@
 # timer
 
+This project is archived. Use [hyperfine](https://github.com/sharkdp/hyperfine) instead.
+
+
+---
+
 `timer` is like `time` but repeats your command and provides basic statistics on execution time.
 
 It's inspired by `perf stat`, but works on macOS.
